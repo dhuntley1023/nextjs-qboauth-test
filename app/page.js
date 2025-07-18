@@ -1,12 +1,12 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { redirect } from 'next/navigation';
 
 export default function Home() {
   const router = useRouter();
 
   const handleConnect = () => {
-    router.push('/api/auth/connect');
+    redirect('/api/auth/connect');
   };
 
   return (
