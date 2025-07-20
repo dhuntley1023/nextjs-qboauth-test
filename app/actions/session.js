@@ -1,4 +1,4 @@
-import { cookies } from 'next/headers'
+import { cookies } from 'next/headers';
 
 export const Session = {
     userEmail: null,
@@ -8,7 +8,8 @@ export const Session = {
 };
 
 export async function setSession(session) {
-  await cookies().set(
+    const cookieStore = await cookies();
+    cookieStore.set(
     process.env.SESSION_COOKIE_NAME, JSON.stringify(session), 
     { httpOnly: true }
     );

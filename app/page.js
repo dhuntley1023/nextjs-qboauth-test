@@ -1,9 +1,9 @@
-'use client';
+'use client'
 
 import { authenticate } from './actions/authenticate';
 import { redirect } from 'next/navigation';
 
-export default function Home() {
+export default function Root() {
   const handleConnect = async () => {
     //const authUrl = await authenticate();
     redirect(await authenticate());

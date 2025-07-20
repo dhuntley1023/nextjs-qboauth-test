@@ -3,7 +3,7 @@
 import { NextResponse } from 'next/server';
 import OAuthClient from 'intuit-oauth';
 //import { cookies } from 'next/headers';
-import { setSession, getSession, Session } from './session';
+import { setSession, Session } from './session';
 
 const oauthClient = new OAuthClient({
   clientId: process.env.QUICKBOOKS_CLIENT_ID,
@@ -26,7 +26,8 @@ export async function callback(requestUrl) {
         const session = { ...Session };
         session.accessToken = token.access_token;
         session.refreshToken = token.refresh_token;
-        session.realmId = token.realmId
+        session.realmId = token.realmId;
+
         await setSession(session);
     
         return NextResponse.redirect(`${process.env.BASE_CALLBACK_URL}/home`);
