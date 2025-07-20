@@ -11,6 +11,7 @@
   "dependencies": {
     "intuit-oauth": "^4.2.0",
     "next": "15.4.1",
+    "node-quickbooks": "^2.0.46",
     "react": "19.1.0",
     "react-dom": "19.1.0"
   },
