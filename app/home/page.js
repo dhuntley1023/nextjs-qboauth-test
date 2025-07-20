@@ -18,7 +18,7 @@ import Account from "../components/account"
     return ( 
         <div>
             <p>Welcome back, you are authenticated!</p>
-           {ids.map(id => <Account id={id} />)}
+           {ids.map(id => <Account key={id} id={id} />)}
          </div>
     );
     
