@@ -12,7 +12,7 @@ export default function Root() {
   return (
     <main style={{ padding: '2rem' }}>
       <h1>QuickBooks Integration</h1>
-      <button onClick={handleConnect}>
+      <button className='bg-white text-black' onClick={handleConnect}>
         Connect to QuickBooks
       </button>
     </main>

@@ -2,7 +2,7 @@
 import Account from "../components/account"
 
  export default function Home() {
-    const ids = Array.from({ length: 50 }, (_, i) => i + 1);
+    const ids = Array.from({ length: 5 }, (_, i) => i + 1);
 
     // const accounts = [];
     // for (let i = 1; i <= 50; i++) {
