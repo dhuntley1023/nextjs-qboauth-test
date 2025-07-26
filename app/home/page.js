@@ -1,4 +1,5 @@
 //import { getSession } from "../actions/session"
+import { Suspense } from "react";
 import Account from "../components/account"
 
  export default function Home() {
@@ -17,9 +18,11 @@ import Account from "../components/account"
     // );
     return ( 
         <div>
-            <p>Welcome back, you are authenticated!</p>
-           {ids.map(id => <Account key={id} id={id} />)}
-         </div>
+            <Suspense
+                fallback={<p>Welcome back, you are authenticated!</p>}>
+                {ids.map(id => <Account key={id} id={id} />)}
+            </Suspense> 
+        </div>
     );
     
 
