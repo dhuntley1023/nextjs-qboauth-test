@@ -1,20 +1,22 @@
 import QuickBooks from 'node-quickbooks';
-import { getSession } from '../actions/session';
+import { Session } from '../actions/session';
 
 export default async function Account({id}) {
 
         async function getAccountAsync(qbo, id) {
-            'use server'
+            //'use server'
             return new Promise((resolve, reject) => {
                 qbo.getAccount(id, (err, account) => {
-                if (err) return reject(err);
-                resolve(account);
+                    if (err) return reject(err);
+                    resolve(account);
                 });
             });
         }
     
-    
-        const session = await getSession();
+        
+        const session = new Session();
+        await session.fetch();
+        console.log('Account: Session:', session);
         if (session && session.accessToken) {
             var qbo = new QuickBooks(process.env.QUICKBOOKS_CLIENT_ID,
                                     process.env.QUICKBOOKS_CLIENT_SECRET,

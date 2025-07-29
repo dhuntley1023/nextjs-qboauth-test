@@ -1,4 +1,3 @@
-//import { getSession } from "../actions/session"
 import { Suspense } from "react";
 import Account from "../components/account"
 
