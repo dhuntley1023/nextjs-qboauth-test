@@ -41,3 +41,4 @@ yarn-error.log*
 next-env.d.ts
 logs/oAuthClient-log.log
 app/models/temp.db
+temp.db

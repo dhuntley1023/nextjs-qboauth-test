@@ -1,8 +1,13 @@
 import { Suspense } from "react";
 import Account from "../components/account"
+import { initializeDatabase } from "../models/index.js";
+ 
+export default async function Home() {
 
- export default function Home() {
-    const ids = Array.from({ length: 5 }, (_, i) => i + 1);
+    // Initialize the database
+    await initializeDatabase();
+ 
+    const ids = Array.from({ length: 0 }, (_, i) => i + 1);
 
     // const accounts = [];
     // for (let i = 1; i <= 50; i++) {

@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers';
+import QuickBooks from 'node-quickbooks';
 
 // export const Session = {
 //     userEmail: null,
@@ -8,7 +9,7 @@ import { cookies } from 'next/headers';
 // };
 
 export async function setSessionCookie(session) {
-    console.log('Setting session cookie:', session);
+    //console.log('Setting session cookie:', session);
     const cookieStore = await cookies();
     cookieStore.set(
         process.env.SESSION_COOKIE_NAME, JSON.stringify(session), 
@@ -19,7 +20,7 @@ export async function setSessionCookie(session) {
 export async function getSessionCookie() {
     const cookieStore = await cookies();
     const sessionJson = cookieStore.get(process.env.SESSION_COOKIE_NAME);
-    console.log('Getting session cookie:', sessionJson);
+    //console.log('Getting session cookie:', sessionJson);
     if (sessionJson) {
         return JSON.parse(sessionJson.value);
     }
@@ -37,7 +38,7 @@ export class Session {
         this._refreshToken = null; 
         this._realmId = null;
         this.sessionState = SessionState.UNINITIALIZED;
-    }
+        }
 
     _getter(value) {
         if (this.sessionState == SessionState.READY) {
@@ -56,6 +57,20 @@ export class Session {
     get realmId() { return this._getter(this._realmId); }
     set realmId(value) { this._realmId = value; }
 
+    get qbo() { 
+        const qbo = new QuickBooks(process.env.QUICKBOOKS_CLIENT_ID,
+                                   process.env.QUICKBOOKS_CLIENT_SECRET,
+                                   this._accessToken,
+                                   false, // no token secret for oAuth 2.0
+                                   this._realmId,
+                                   true, // use the sandbox?
+                                   false, // enable debugging?
+                                   null, // set minorversion, or null for the latest version
+                                   '2.0', //oAuth version
+                                   this._refreshToken);
+        return this._getter(qbo); 
+    }
+    
     async fetch() {
         const sessionData = await getSessionCookie();
         if (sessionData) {
@@ -68,6 +83,7 @@ export class Session {
 
 
     async update() {
+        console.log('Updating session cookie');
         const sessionData = {
             accessToken: this._accessToken,
             refreshToken: this._refreshToken,
@@ -75,4 +91,6 @@ export class Session {
         };
         await setSessionCookie(sessionData);
     }
+
+    isReady = () => this.sessionState === SessionState.READY;
 }
