@@ -1,10 +1,11 @@
 //'use server'
 
 import sqlite3 from 'sqlite3';
-import { Sequelize } from "sequelize";
+import { Sequelize, Op } from "sequelize";
 import { Account } from "./account.js";
 import { Customer } from "./customer.js";
 import { Invoice } from "./invoice.js";
+import { Vendor } from "./vendor";
 import QBO from '../actions/qbo.js';
 import { Session } from '../actions/session.js';
 
@@ -20,6 +21,7 @@ const models = {
     Account,
     Customer,
     Invoice,
+    Vendor
 };
 
 
@@ -56,8 +58,8 @@ export async function initializeDatabase() {
             const qbo = new QBO(session);
             //console.log('Customer: QBO:', qbo);
 
-               // Initialize all models
-            for (const model of Object.values(models)){
+            // Initialize all models
+            for (const model of Object.values(models)) {
                 if ("loadFromQuickBooks" in model) {
                     console.log(`Loading from QuickBooks: ${model.name}`);
                     const count = await model.loadFromQuickBooks(qbo);
@@ -83,11 +85,23 @@ export async function initializeDatabase() {
         console.error("Error loading database:" + error.message);
     }
 
-    const invoicesFound = await Invoice.findAll({
-        where: {
-            CustomerId: 1
-        }
-    });
-    console.log(JSON.stringify(invoicesFound, null, 2));
+    // const recordsFound = await Account.count({
+    //     group: [
+    //         sequelize.col('AccountType'),
+    //         sequelize.col('AccountSubType') 
+    //     ],
+    // });
+    // console.log(JSON.stringify(recordsFound.sort((a,b)=>a.count-b.count), null, 2));
 
+    const recordsFound = await Account.findAll({
+        attributes:
+            [
+                'AccountType', 'AccountSubType',
+                [Sequelize.fn('COUNT', Sequelize.col('id')), 'userCount']
+            ],
+        group: ['AccountType', 'AccountSubType'],
+        order: [[Sequelize.literal('userCount'), 'ASC']]
+    });
+    //console.log(JSON.stringify(recordsFound, null, 2));
+    console.log("Database initialization complete")
 }

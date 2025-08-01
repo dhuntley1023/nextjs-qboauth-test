@@ -59,4 +59,12 @@ export default class QBO extends QuickBooks {
   findInvoices(options = {}) {
     return qbPromisify(super.findInvoices.bind(this), "findInvoices", options);
   }
+
+ findVendors(options = {}) {
+    return qbPromisify(super.findVendors.bind(this), "findVendors", options);
+  }
+
+ findAccounts(options = {}) {
+    return qbPromisify(super.findAccounts.bind(this), "findAccounts", options);
+  }
 }
